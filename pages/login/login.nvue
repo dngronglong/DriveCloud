@@ -1,0 +1,74 @@
+<template>
+	<view>
+		<myp-navbar title="登录" bgType="primary"></myp-navbar>
+		<view class="bi-margin">
+			<myp-input v-model="user" mode="mail" icon="mail" placeholder="请输入账号" space="20rpx" type='text'
+				boxStyle="padding-left:10rpx;padding-right:10rpx;"></myp-input>
+			<myp-input v-model="password" :maxlength="24" icon="lock" :password="pwdNoVisible" :indicator="rightEye"
+				placeholder="密码" space="20rpx" type='password' boxStyle="padding-left:10rpx;padding-right:10rpx;"
+				@indicatorClicked="togglePwdVisible"></myp-input>
+
+			<myp-button bgType="success" :loadingSrc="loadingSrc" text="登录" :loading="isLoading" @buttonClicked="login">
+			</myp-button>
+		</view>
+	</view>
+</template>
+
+<script>
+	import {
+		login
+	} from '@/common/user.js'
+	export default {
+		data() {
+			return {
+				pwdNoVisible: true,
+				user: '',
+				password: '',
+				loadingSrc: '',
+				isLoading: false,
+				captchaCode: ''
+			}
+		},
+		computed: {
+			rightEye() {
+				return this.pwdNoVisible ? 'eye' : 'eye-close'
+			}
+		},
+		methods: {
+			togglePwdVisible() {
+				console.log(111)
+				this.pwdNoVisible = !this.pwdNoVisible
+			},
+			login() {
+				this.isLoading = true
+				this.loadingSrc = '/static/ui/loading.gif'
+				login({
+					userName: this.user,
+					Password: this.password,
+					captchaCode: this.captchaCode
+				}).then(res => {
+					if(res.code==0){
+						getApp().globalData.userInfo=res.data
+						uni.navigateTo({
+							url: '/pages/index/index',
+						});
+						
+					}
+				}).catch(err => {
+					console.log(err)
+					// error
+					// err 有可能是 Error 对象，也有可能是 您自己定义的内容，处理的时候您需要自己判断
+					// 一个通用的错误提示组件就可以完成
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.bi {
+		&-margin {
+			margin: 0 32rpx;
+		}
+	}
+</style>

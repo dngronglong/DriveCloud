@@ -1,0 +1,87 @@
+<template>
+	<view>
+		<myp-tabbar ref="tabbar" :tabs="tabs" :tabStyle="tabStyle" @tabClicked="tabbarSwitched">
+			<home-tab></home-tab>
+			<files-tab></files-tab>
+			<share-tab></share-tab>
+			<mine-tab></mine-tab>
+		</myp-tabbar>
+		<!-- <myp-loading ref="myp-loading"></myp-loading>
+		<myp-toast ref="myp-toast"></myp-toast> -->
+	</view>
+</template>
+
+<script>
+	import homeTab from './home.vue'
+	import filesTab from './files.vue'
+	import mineTab from './mine.vue'
+	import shareTab from './share.vue'
+	
+
+	export default {
+		components:{
+			homeTab,filesTab,shareTab,mineTab
+		},
+		provide() {
+			return {
+				tabRoot: this
+			}
+		},
+		data() {
+			return {
+				tabs: [
+					{
+						icon: '/static/tabs/home.png',
+						selectedIcon: '/static/tabs/homeH.png',
+						title: '主页',
+						selectedTitle: '主页'
+					},
+					{
+						icon: '/static/tabs/discovery.png',
+						selectedIcon: '/static/tabs/discoveryH.png',
+						title: '文件',
+						selectedTitle: '文件',
+						badge: 12
+					},
+					{
+						icon: '/static/tabs/mine.png',
+						selectedIcon: '/static/tabs/mineH.png',
+						title: '分享',
+						selectedTitle: '分享',
+						dot: true
+					},
+					{
+						icon: '/static/tabs/mine.png',
+						selectedIcon: '/static/tabs/mineH.png',
+						title: '我的',
+						selectedTitle: '我的',
+						dot: true
+					}
+				],
+				tabStyle: {
+					iconStyle: 'width:22px;height:22px;',
+					selectedIconStyle: 'width:22px;height:22px;',
+					titleStyle: 'font-size:12px;color:#888888;',
+					selectedTitleStyle: 'font-size:12px;color:#108EE9;',
+					boxStyle: 'background-color: #FFFFFF;'
+				}
+			}
+		},
+		onLoad(option) {
+
+		},
+		methods: {
+			tabbarSwitched(val) {
+				console.log(val)
+				// 记录当前tab
+				const app = getApp()
+				if (!app) return;
+				app.globalData.currentTab = val.page * 1
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>
